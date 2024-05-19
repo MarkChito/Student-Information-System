@@ -97,7 +97,7 @@ class Model
 
     private function insert_admin_data()
     {
-        $admin_check_sql = "SELECT COUNT(*) as count FROM `users` WHERE `username` = 'admin'";
+        $admin_check_sql = "SELECT COUNT(*) as count FROM `users` WHERE `id` = 1";
         $result = $this->query($admin_check_sql);
         $count = $result->fetch_assoc()['count'];
 

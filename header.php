@@ -47,7 +47,7 @@ $school_branches = $model->fetchAll($sql_3);
     <title>Student Information System</title>
 
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/logo.png">
-    
+
     <link href="./dist/css/style.min.css" rel="stylesheet">
     <link href="./dist/css/custom-style.css" rel="stylesheet">
     <link href="./assets/libs/flot/css/float-chart.css" rel="stylesheet">
@@ -83,17 +83,15 @@ $school_branches = $model->fetchAll($sql_3);
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="me-2"><?= $user["name"] ?></span>
+                                <span class="me-2"><?= strtoupper($user["name"]) ?></span>
                                 <img src="./assets/images/default_user.png" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                <?php if ($user["user_type"] == "student") : ?>
-                                    <a class="dropdown-item" href="javascript:void(0)">
-                                        <i class="ti-user me-1 ms-1"></i>
-                                        My Profile
-                                    </a>
-                                <?php endif ?>
-                                <a class="dropdown-item" href="javascript:void(0)">
+                                <a class="dropdown-item" href="javascript:void(0)" id="btn_about_us">
+                                    <i class="ti-info me-1 ms-1"></i>
+                                    About Us
+                                </a>
+                                <a class="dropdown-item" href="javascript:void(0)" id="btn_update_account">
                                     <i class="ti-settings me-1 ms-1"></i>
                                     Account Settings
                                 </a>

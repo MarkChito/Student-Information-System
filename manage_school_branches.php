@@ -33,8 +33,8 @@
                                             <td><?= $school_branch["name"] ?></td>
                                             <td><?= $school_branch["address"] ?></td>
                                             <td class="text-center">
-                                                <i class="fas fa-edit text-primary me-1" role="button"></i>
-                                                <i class="fas fa-trash-alt text-danger" role="button"></i>
+                                                <i class="fas fa-edit text-primary me-1 edit_branch" branch_id="<?= $school_branch["id"] ?>" role="button"></i>
+                                                <i class="fas fa-trash-alt text-danger delete_branch" branch_id="<?= $school_branch["id"] ?>" role="button"></i>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>

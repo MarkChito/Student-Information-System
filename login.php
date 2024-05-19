@@ -7,6 +7,15 @@ function base_url()
 {
     return "http://localhost/Student-Information-System/";
 }
+
+require_once "model.php";
+
+$model = new Model();
+
+$model->initialize_database();
+
+$sql = "SELECT * FROM `school_branches` ORDER BY `name` ASC";
+$school_branches = $model->fetchAll($sql);
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +30,7 @@ function base_url()
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/logo.png">
     <link href="./dist/css/style.min.css" rel="stylesheet">
     <link href="./dist/css/custom-style.css" rel="stylesheet">
+    <link href="./assets/extra-libs/sweetalert/css/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -130,6 +140,19 @@ function base_url()
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label for="register_school_branch">School Branch</label>
+                                    <select id="register_school_branch" class="form-select" required>
+                                        <option value selected disabled></option>
+                                        <?php if ($school_branches) : ?>
+                                            <?php foreach ($school_branches as $school_branch) : ?>
+                                                <option value="<?= $school_branch["name"] ?>"><?= $school_branch["name"] ?></option>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="register_course">Course</label>
                                     <select id="register_course" class="form-select" required>
                                         <option value selected disabled></option>
@@ -140,10 +163,10 @@ function base_url()
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="register_year">Year</label>
-                                    <select id="register_year" class="form-select" required>
+                                    <select id="register_year" class="select2 form-select shadow-none" required>
                                         <option value selected disabled></option>
                                         <option value="1">1st Year</option>
                                         <option value="2">2nd Year</option>
@@ -152,7 +175,7 @@ function base_url()
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="register_section">Section</label>
                                     <input type="text" id="register_section" class="form-control" required>
@@ -202,11 +225,13 @@ function base_url()
 
     <script src="./assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="./assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/extra-libs/sweetalert/js/sweetalert2.min.js"></script>
     <script>
         jQuery(document).ready(function() {
             const server = "server.php";
             const base_url = "<?= base_url() ?>";
             const notification = <?= isset($_SESSION["notification"]) ? json_encode($_SESSION["notification"]) : json_encode(null) ?>;
+            const school_branches = <?= $school_branches ? json_encode($school_branches) : json_encode(null) ?>;
 
             remove_alert();
 
@@ -258,7 +283,15 @@ function base_url()
             })
 
             $("#btn_register").click(function() {
-                $("#register_modal").modal("show");
+                if (school_branches) {
+                    $("#register_modal").modal("show");
+                } else {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "School branches are empty. Please contact your administrator.",
+                        icon: "error"
+                    });
+                }
             })
 
             $("#register_form").submit(function() {
@@ -268,6 +301,7 @@ function base_url()
                 const student_number = $("#register_student_number").val();
                 const email = $("#register_email").val();
                 const mobile_number = $("#register_mobile_number").val();
+                const school_branch = $("#register_school_branch").val();
                 const course = $("#register_course").val();
                 const year = $("#register_year").val();
                 const section = $("#register_section").val();
@@ -320,6 +354,7 @@ function base_url()
                     formData.append('student_number', student_number);
                     formData.append('email', email);
                     formData.append('mobile_number', mobile_number);
+                    formData.append('school_branch', school_branch);
                     formData.append('course', course);
                     formData.append('year', year);
                     formData.append('section', section);
@@ -337,17 +372,16 @@ function base_url()
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            if (!response) {
+                            if (!response.error_student_number && !response.error_username) {
                                 location.href = base_url;
                             } else {
-                                if (response == "error_student_number") {
+                                if (response.error_student_number) {
                                     $("#error_register_student_number").text("Student Number is already in use");
                                     $("#error_register_student_number").removeClass("d-none");
                                     $("#register_student_number").addClass("is-invalid");
-                                } 
+                                }
 
-                                if (response == "error_username") 
-                                {
+                                if (response.error_username) {
                                     $("#error_register_username").removeClass("d-none");
                                     $("#register_username").addClass("is-invalid");
                                 }

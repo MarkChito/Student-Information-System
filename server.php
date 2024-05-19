@@ -34,7 +34,13 @@ if (isset($_POST["login"])) {
 }
 
 if (isset($_POST["register"])) {
-    $response = false;
+    $response_error_student_number = array(
+        "error_student_number" => false,
+    );
+
+    $response_error_username = array(
+        "error_username" => false,
+    );
 
     $first_name = $_POST["first_name"];
     $middle_name = $_POST["middle_name"];
@@ -42,6 +48,7 @@ if (isset($_POST["register"])) {
     $student_number = $_POST["student_number"];
     $email = $_POST["email"];
     $mobile_number = $_POST["mobile_number"];
+    $school_branch = $_POST["school_branch"];
     $course = $_POST["course"];
     $year = $_POST["year"];
     $section = $_POST["section"];
@@ -55,7 +62,9 @@ if (isset($_POST["register"])) {
     $student_info = $model->fetch($sql);
 
     if ($student_info) {
-        $response = "error_student_number";
+        $response_error_student_number = array(
+            "error_student_number" => true,
+        );
 
         $errors++;
     }
@@ -64,10 +73,14 @@ if (isset($_POST["register"])) {
     $user_info = $model->fetch($sql_2);
 
     if ($user_info) {
-        $response = "error_username";
+        $response_error_username = array(
+            "error_username" => true,
+        );
 
         $errors++;
     }
+
+    $response = array_merge($response_error_student_number, $response_error_username);
 
     if ($errors == 0) {
         if ($middle_name) {
@@ -79,9 +92,11 @@ if (isset($_POST["register"])) {
         }
 
         $user_data = array(
+            "created_at" => $current_date,
             "name" => $name,
             "username" => $username,
             "password" => password_hash($password, PASSWORD_BCRYPT),
+            "user_type" => "student",
         );
 
         $model->insert("users", $user_data);
@@ -92,6 +107,7 @@ if (isset($_POST["register"])) {
         $login_id = $user_info_2["id"];
 
         $student_data = array(
+            "created_at" => $current_date,
             "login_id" => $login_id,
             "first_name" => $first_name,
             "middle_name" => $middle_name,
@@ -99,6 +115,7 @@ if (isset($_POST["register"])) {
             "student_number" => $student_number,
             "email" => $email,
             "mobile_number" => $mobile_number,
+            "school_branch" => $school_branch,
             "course" => $course,
             "year" => $year,
             "section" => strtoupper($section),
@@ -114,6 +131,26 @@ if (isset($_POST["register"])) {
     }
 
     echo json_encode($response);
+}
+
+if (isset($_POST["new_school_branch"])) {
+    $name = $_POST["name"];
+    $address = $_POST["address"];
+
+    $data = array(
+        "created_at" => $current_date,
+        "name" => $name,
+        "address" => $address,
+    );
+
+    $model->insert("school_branches", $data);
+
+    $_SESSION["notification"] = array(
+        "type" => "alert-success",
+        "message" => "School Branch is added successfully.",
+    );
+
+    echo json_encode(true);
 }
 
 if (isset($_POST["logout"])) {

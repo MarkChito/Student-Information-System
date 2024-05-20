@@ -166,7 +166,7 @@ $school_branches = $model->fetchAll($sql);
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="register_year">Year</label>
-                                    <select id="register_year" class="select2 form-select shadow-none" required>
+                                    <select id="register_year" class="form-select" required>
                                         <option value selected disabled></option>
                                         <option value="1">1st Year</option>
                                         <option value="2">2nd Year</option>
@@ -178,7 +178,7 @@ $school_branches = $model->fetchAll($sql);
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="register_section">Section</label>
-                                    <input type="text" id="register_section" class="form-control" required>
+                                    <input type="text" id="register_section" class="form-control text-center" maxlength="1" required>
                                     <small class="text-danger d-none" id="error_register_section">Section must be A, B, C, etc</small>
                                 </div>
                             </div>

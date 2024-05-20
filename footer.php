@@ -224,6 +224,32 @@
     </div>
 </div>
 
+<!-- About Us Modal -->
+<div class="modal fade" id="about_us_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Student Information System</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Welcome to the Student Information System (SIS). Our system is designed to efficiently manage and streamline student data for educational institutions, providing a comprehensive solution for handling student records, grades, attendance, and more.</p>
+                <h6>Team Members</h6>
+                <ul>
+                    <li>John Doe - Project Manager</li>
+                    <li>Jane Smith - Lead Developer</li>
+                    <li>Emily Johnson - UI/UX Designer</li>
+                    <li>Michael Brown - Backend Developer</li>
+                    <li>Sarah Davis - QA Engineer</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="./assets/libs/jquery/dist/jquery.min.js"></script>
 <script src="./assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="./assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
@@ -251,6 +277,72 @@
         if (notification) {
             show_alert(notification.type, notification.message);
         }
+
+        $("#update_profile_form").submit(function() {
+            const id = $("#update_profile_id").val();
+            const first_name = $("#update_profile_first_name").val();
+            const middle_name = $("#update_profile_middle_name").val();
+            const last_name = $("#update_profile_last_name").val();
+            const student_number = $("#update_profile_student_number").val();
+            const email = $("#update_profile_email").val();
+            const mobile_number = $("#update_profile_mobile_number").val();
+            const school_branch = $("#update_profile_school_branch").val();
+            const course = $("#update_profile_course").val();
+            const year = $("#update_profile_year").val();
+            const section = $("#update_profile_section").val();
+            const address = $("#update_profile_address").val();
+
+            let errors = 0;
+
+            if ((mobile_number.length != 11) || (!mobile_number.startsWith("09"))) {
+                $("#error_update_profile_mobile_number").removeClass("d-none");
+                $("#update_profile_mobile_number").addClass("is-invalid");
+
+                errors++;
+            }
+
+            if (errors == 0) {
+                $("#update_profile_submit").text("Please wait..");
+                $("#update_profile_submit").attr("disabled", true);
+
+                var formData = new FormData();
+
+                formData.append('id', id);
+                formData.append('first_name', first_name);
+                formData.append('middle_name', middle_name);
+                formData.append('last_name', last_name);
+                formData.append('student_number', student_number);
+                formData.append('email', email);
+                formData.append('mobile_number', mobile_number);
+                formData.append('school_branch', school_branch);
+                formData.append('course', course);
+                formData.append('year', year);
+                formData.append('section', section);
+                formData.append('address', address);
+
+                formData.append('update_profile', true);
+
+                $.ajax({
+                    url: server,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        location.href = base_url + "my_profile";
+                    },
+                    error: function(_, _, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        })
+
+        $("#update_profile_mobile_number").keydown(function() {
+            $("#error_update_profile_mobile_number").addClass("d-none");
+            $("#update_profile_mobile_number").removeClass("is-invalid");
+        })
 
         $(document).on("click", ".delete_student", function() {
             const id = $(this).attr("user_id");

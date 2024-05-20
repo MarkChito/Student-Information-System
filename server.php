@@ -197,6 +197,62 @@ if (isset($_POST["update"])) {
     echo json_encode($response);
 }
 
+if (isset($_POST["update_profile"])) {
+    $id = $_POST["id"];
+    $first_name = $_POST["first_name"];
+    $middle_name = $_POST["middle_name"];
+    $last_name = $_POST["last_name"];
+    $student_number = $_POST["student_number"];
+    $email = $_POST["email"];
+    $mobile_number = $_POST["mobile_number"];
+    $school_branch = $_POST["school_branch"];
+    $course = $_POST["course"];
+    $year = $_POST["year"];
+    $section = $_POST["section"];
+    $address = $_POST["address"];
+
+    if ($middle_name) {
+        $middle_initial = strtoupper(substr($middle_name, 0, 1));
+
+        $name = "$first_name $middle_initial. $last_name";
+    } else {
+        $name = "$first_name $last_name";
+    }
+
+    $user_data = array(
+        "created_at" => $current_date,
+        "name" => $name,
+    );
+
+    $model->update("users", $user_data, "`id` = '" . $id . "'");
+
+    $student_data = array(
+        "created_at" => $current_date,
+        "first_name" => $first_name,
+        "middle_name" => $middle_name,
+        "last_name" => $last_name,
+        "student_number" => $student_number,
+        "email" => $email,
+        "mobile_number" => $mobile_number,
+        "school_branch" => $school_branch,
+        "course" => $course,
+        "year" => $year,
+        "section" => strtoupper($section),
+        "address" => $address,
+    );
+
+    $model->update("students", $student_data, "`login_id` = '" . $id . "'");
+
+    $_SESSION["notification"] = array(
+        "type" => "alert-success",
+        "message" => "Profile data has been updated.",
+    );
+
+    $response = true;
+
+    echo json_encode($response);
+}
+
 if (isset($_POST["new_school_branch"])) {
     $name = $_POST["name"];
     $address = $_POST["address"];

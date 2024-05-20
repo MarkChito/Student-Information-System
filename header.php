@@ -35,6 +35,14 @@ $students = $model->fetchAll($sql_2);
 
 $sql_3 = "SELECT * FROM `school_branches` ORDER BY `created_at` DESC";
 $school_branches = $model->fetchAll($sql_3);
+
+if ($user["user_type"] == "student") {
+    $sql_4 = "SELECT * FROM `students` WHERE `login_id` = '" . $user_id . "'";
+    $student = $model->fetch($sql_4);
+}
+
+$sql_5 = "SELECT * FROM `school_branches` ORDER BY `name` ASC";
+$school_branches = $model->fetchAll($sql_5);
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +95,7 @@ $school_branches = $model->fetchAll($sql_3);
                                 <img src="./assets/images/default_user.png" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="javascript:void(0)" id="btn_about_us">
+                                <a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#about_us_modal">
                                     <i class="ti-info me-1 ms-1"></i>
                                     About Us
                                 </a>

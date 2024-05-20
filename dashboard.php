@@ -9,7 +9,7 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col">
             <div class="card card-hover">
                 <div class="box bg-warning text-center">
                     <h1 class="font-light text-white"><?= count($model->fetchAll("SELECT `id` FROM `students` WHERE `course` = 'BSBA'")) ?></h1>
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col">
             <div class="card card-hover">
                 <div class="box bg-success text-center">
                     <h1 class="font-light text-white"><?= count($model->fetchAll("SELECT `id` FROM `students` WHERE `course` = 'BSA'")) ?></h1>
@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col">
             <div class="card card-hover">
                 <div class="box bg-primary text-center">
                     <h1 class="font-light text-white"><?= count($model->fetchAll("SELECT `id` FROM `students` WHERE `course` = 'BSIT'")) ?></h1>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col">
             <div class="card card-hover">
                 <div class="box bg-danger text-center">
                     <h1 class="font-light text-white"><?= count($model->fetchAll("SELECT `id` FROM `students` WHERE `course` = 'BSC'")) ?></h1>

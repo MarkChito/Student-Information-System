@@ -5,7 +5,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function base_url()
 {
-    return "http://localhost/Student-Information-System/";
+    $current_url = $_SERVER["REQUEST_URI"];
+    $splitted_url = explode("/", $current_url);
+
+    $base_url = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["SERVER_NAME"] . "/" . $splitted_url[1] . "/";
+    
+    return $base_url;
 }
 
 require_once "model.php";

@@ -5,7 +5,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function base_url()
 {
-    return "http://localhost/Student-Information-System/";
+    $current_url = $_SERVER["REQUEST_URI"];
+    $splitted_url = explode("/", $current_url);
+
+    $base_url = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["SERVER_NAME"] . "/" . $splitted_url[1] . "/";
+    
+    return $base_url;
 }
 
 require_once "model.php";
@@ -119,19 +124,19 @@ $school_branches = $model->fetchAll($sql_5);
                     <ul id="sidebarnav" class="pt-4">
                         <?php if ($user["user_type"] == "admin") : ?>
                             <li class="sidebar-item">
-                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url() ?>" aria-expanded="false">
+                                <a class="sidebar-link waves-effect waves-dark" href="<?= base_url() ?>" aria-expanded="false">
                                     <i class="mdi mdi-view-dashboard"></i>
                                     <span class="hide-menu">Dashboard</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url() ?>manage_students" aria-expanded="false">
+                                <a class="sidebar-link waves-effect waves-dark" href="<?= base_url() ?>manage_students" aria-expanded="false">
                                     <i class="mdi mdi-school"></i>
                                     <span class="hide-menu">Manage Students</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url() ?>manage_school_branches" aria-expanded="false">
+                                <a class="sidebar-link waves-effect waves-dark" href="<?= base_url() ?>manage_school_branches" aria-expanded="false">
                                     <i class="mdi mdi-map-marker"></i>
                                     <span class="hide-menu">Manage School Branches</span>
                                 </a>
@@ -139,14 +144,14 @@ $school_branches = $model->fetchAll($sql_5);
                         <?php endif ?>
                         <?php if ($user["user_type"] == "student") : ?>
                             <li class="sidebar-item">
-                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url() ?>my_profile" aria-expanded="false">
+                                <a class="sidebar-link waves-effect waves-dark" href="<?= base_url() ?>my_profile" aria-expanded="false">
                                     <i class="mdi mdi-face-profile"></i>
                                     <span class="hide-menu">My Profile</span>
                                 </a>
                             </li>
                         <?php endif ?>
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link logout" href="javascript:void(0)" aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark logout" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-logout"></i>
                                 <span class="hide-menu">Logout</span>
                             </a>
